@@ -13,6 +13,14 @@ This project is a comprehensive logistics and routing application consisting of 
   - Fleet status monitoring
   - Weather data integration
 - **Tech Stack**: Python, FastAPI, Pydantic, NumPy, PyTorch, Uvicorn
+- **Programming Languages**: Python 3.8+
+- **APIs Used**:
+  - FastAPI (web framework)
+  - Pydantic (data validation)
+  - NumPy (numerical computing)
+  - PyTorch (machine learning for predictions)
+  - httpx (HTTP client for testing)
+- **Platform Support**: Cross-platform (runs on any OS with Python)
 - **Endpoints**:
   - `POST /route`: Calculate optimal route
   - `GET /traffic`: Get traffic predictions
@@ -29,6 +37,22 @@ This project is a comprehensive logistics and routing application consisting of 
   - Fleet management dashboard
   - Traffic and weather predictions
 - **Tech Stack**: Dart, Flutter, Flutter Map, Geolocator
+- **Programming Languages**: Dart
+- **APIs Used**:
+  - Flutter SDK (UI framework)
+  - Flutter Map (map rendering)
+  - Geolocator (location services)
+  - HTTP/Dio (API communication)
+  - Google Maps Flutter (alternative map provider)
+  - Provider (state management)
+  - FL Chart (data visualization)
+- **Platform Support**:
+  - **Android**: Full support (APK generation)
+  - **iOS**: Full support (iOS app generation)
+  - **Web**: Full support (runs in browsers like Chrome, Edge, Firefox)
+  - **Windows**: Desktop application support
+  - **macOS**: Desktop application support
+  - **Linux**: Desktop application support
 - **Screens**:
   - Login/Dashboard
   - Map with routing
