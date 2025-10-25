@@ -25,11 +25,11 @@ class _MapWidgetState extends State<MapWidget> {
     setState(() => _loadingWeather = true);
     try {
       final weather = await ApiService.instance.getWeather();
-      setState(() => _weather = weather);
+      if (mounted) setState(() => _weather = weather);
     } catch (e) {
       // Handle error
     } finally {
-      setState(() => _loadingWeather = false);
+      if (mounted) setState(() => _loadingWeather = false);
     }
   }
 

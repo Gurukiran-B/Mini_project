@@ -6,6 +6,7 @@ from typing import Dict, List, Tuple
 import math
 import random
 from datetime import datetime, timedelta
+import httpx
 
 from .models import (
     GraphInput, RouteResult, HealthStatus,
@@ -160,19 +161,53 @@ async def get_optimal_route(payload: OptimalRouteInput) -> RouteResult:
 
 @app.get("/weather", response_model=WeatherData)
 async def get_weather(location: str = "Mumbai") -> WeatherData:
-    # Mock weather data for India
-    conditions = ["clear", "rain", "cloudy", "sunny"]
-    temp = random.uniform(25, 35)  # Typical Indian temperatures
-    condition = random.choice(conditions)
-    humidity = random.uniform(50, 90)  # Higher humidity in India
-    wind_speed = random.uniform(5, 25)
-    return WeatherData(
-        location=location,
-        temperature=temp,
-        condition=condition,
-        humidity=humidity,
-        wind_speed=wind_speed,
-    )
+    api_key = "ff3ad8a815d0a880e16b65a975eb9b32"
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={location}&appid={api_key}&units=metric"
+
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url)
+            response.raise_for_status()
+            data = response.json()
+
+        # Map OpenWeatherMap condition to our simple conditions
+        weather_id = data['weather'][0]['id']
+        if weather_id >= 200 and weather_id < 300:
+            condition = "storm"
+        elif weather_id >= 300 and weather_id < 600:
+            condition = "rain"
+        elif weather_id >= 600 and weather_id < 700:
+            condition = "snow"
+        elif weather_id >= 700 and weather_id < 800:
+            condition = "fog"
+        elif weather_id == 800:
+            condition = "clear"
+        elif weather_id > 800:
+            condition = "cloudy"
+        else:
+            condition = "clear"
+
+        return WeatherData(
+            location=data['name'],
+            temperature=data['main']['temp'],
+            condition=condition,
+            humidity=data['main']['humidity'],
+            wind_speed=data['wind']['speed'],
+        )
+    except Exception as e:
+        # Fallback to mock data if API fails
+        conditions = ["clear", "rain", "cloudy", "sunny"]
+        temp = random.uniform(25, 35)
+        condition = random.choice(conditions)
+        humidity = random.uniform(50, 90)
+        wind_speed = random.uniform(5, 25)
+        return WeatherData(
+            location=location,
+            temperature=temp,
+            condition=condition,
+            humidity=humidity,
+            wind_speed=wind_speed,
+        )
 
 
 @app.get("/search_address", response_model=List[DeliverySearchResult])
